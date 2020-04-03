@@ -1,0 +1,107 @@
+= Mister Spex Scientist
+
+The Mister Spex Executor contains a small, extensible library for execution Java methods to retry failing operations, measure the execution time or support refactoring in production.
+
+Parts of the Mister Spex Scientist based on the ideas of the https://github.com/github/scientist/[Github Scientist] implementation.
+
+The implementation is similar to https://github.com/rawls238/Scientist4J[Scientist4J] but has _no_ dependencies to external libraries.
+
+Additionaly: for the Mister Spex Scientist implementation it is not required to run as a https://en.wikipedia.org/wiki/Singleton_pattern[Singleton].
+For this reason you are responsible for collecting and processing the execution metrics.
+Implementation also delegates the comparison of results to external solutions. 
+We believe this gives the you more freedom to use the API in your environment.
+
+== Scientist usage
+
+The main idea of the Scientist solution is testing software refacorings in production.
+Therefor a Scientist offers the execution of a _candidate_ (the new implementation of a functionality) and the _control_, which should be the current production implementation of a functionality.
+
+Main class of the Mister Spex Scientist implementation is `io.misterspex.executor.scientist.Experiment`. 
+
+=== Basic usage
+
+[source,java]
+----
+final Experiment<String> e = new Experiment<>();
+final String result = e.execute(() -> "control", () -> "candidate");
+----
+
+`Experiment` returns the result of the _control_ function to the caller or throws the exception of the _control_ execution.
+This behavior may be configurable in future version.
+The execution result of _control_ and _candidate_ together with additional metrics (execution time, eventual thrown exceptions…) are collected and published.
+You collect this `Result` by overwriting the `publish(Result)` method.
+`publish` is always called before returning the execution function wether with the result or throwing an exception.
+
+[source,java]
+----
+final Experiment<String> e = new Experiment<>() {
+    protected void publish(final Result result) {
+         logger.log(INFO, result);
+    }
+};
+final String result = e.execute(() -> "control", () -> "candidate");
+----
+
+With overwriting additional methods it is possible to control the behavior of the execution.
+
+* `enabled()` - control the `candidate` execution.
+  _true_ by default.
+* `executionOrder()` - control wether execute _control_ or _candidate_ first.
+  Fifty fifty mix by default.
+
+=== Synchronous and asynchronous usage
+
+`Experiment` offers two types of constructors.
+Such without offering an `java.util.concurrent.ExecutorService` to supply and such with offering.
+
+* All executions are _synchronous_ if you create an `Experiment` _without_ an `ExecutorService`.
+* All executions are _asynchronous_ if you create an `Experiment` _with_ an `ExecutorService`.
+
+NOTE: If creating an `ExecutorService` with `java.util.concurrent.Executors.newSingleThreadScheduledExecutor()` the execution is again _synchronous_.
+
+== Executor usage 
+
+Basic executors are located in the `io.misterspex.executor` package.
+An executor can operate with `Runnable` or `Callable` implementations.
+A `Callable` execution will return a value where a `Runnable` execution will return `void`.
+
+Currently two executors are implemented.
+
+1. `TimingExecutor` - measures the execution time of the executed function.
+   It offers a method to query the time as `Duration`.
+2. `TrialExecutor` - tries to execute the function.
+   If an execution fails, the executor retries the execution several times (configurable) before give up.
+
+Both interfaces offers factory methods to generate instances of the executors. 
+Such factory methods also offers factory methods to chain executors.
+
+=== Example
+
+[source,java]
+----
+final TrialExecutor executor = TrialExecutor.of(2);
+
+final String result = executor.execute(() -> doSomeStuff(data));
+
+out.printf("Result %s - Trials: %d%n", result, executor.trials());
+----
+
+The snippet shows the creation and a `TrialExecutor`, which executes the function `doSomeStuff(data)` maximum 2 times.
+
+== Runtime
+
+* Version 1.0.0 → Java 8 or higher
+
+== Versioning
+
+The Mister Spex Executor uses a semantic naming pattern as described in https://semver.org[Semantic Versioning 2.0.0].
+
+Changing the minimum Java version is also a an incompatible API change and therefor will be a MAJOR change.
+
+== License
+
+You are free to choose from one of the following licenses:
+
+* https://apache.org/licenses/LICENSE-2.0.txt[Apache-2.0] or
+* https://www.gnu.org/licenses/gpl-3.0.txt[GPL-3.0-or-later]
+

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<project name="Mister Spex Scientist">
+  <bannerLeft>
+    <name>Mister Spex Scientist</name>
+  </bannerLeft>
+  <body>
+    <menu name="Implementation">
+        <item name="Introduction" href="index.html"/>
+        <item name="Javadoc" href="apidocs/index.html"/>
+    </menu>
+    <menu ref="reports"/>
+  </body>
+</project>
