@@ -26,6 +26,7 @@
     <name>${project.artifactId}</name>
     <inceptionYear>2020</inceptionYear>
     <description>Execution support and scientist API</description>
+    <url>https://github.com/MisterSpex/misterspex-scientist</url>
 
     <dependencies>
         <dependency>
@@ -367,6 +368,16 @@
             </properties>
         </developer>
     </developers>
+    
+    <contributors>
+        <contributor>
+            <name>Dragos Nedelcu</name>
+            <timezone>Europe/Berlin</timezone>
+            <roles>
+                <role>QA</role>
+            </roles>
+        </contributor>
+    </contributors>
 
     <licenses>
         <license>
@@ -380,4 +391,17 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    
+    
+    <scm>
+        <connection>scm:git:git://github.com/MisterSpex/misterspex-scientist.git</connection>
+        <developerConnection>scm:git:git@github.com:MisterSpex/misterspex-scientist.git</developerConnection>
+        <url>https://github.com/dexecutor/MisterSpex/misterspex-scientist</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/MisterSpex/misterspex-scientist/issues</url>
+    </issueManagement>
 </project>

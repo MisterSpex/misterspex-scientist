@@ -271,7 +271,7 @@ public class Experiment<V> {
     /**
      * Publish the result of the execution.
      * <p>The default implementation returns immediately. Override this method for your own behavior.</p>
-     * <p><strong>Note:</strong> {@code publish} is protected against exceptions from overriding methods.
+     * <p><strong>Note:</strong> {@code publish} is protected against exceptions thrown by overriding methods.
      * Caught exceptions from overwriting methods are ignored.</p>
      * @param result the result to publish. Never {@code null}
      */

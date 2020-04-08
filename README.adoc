@@ -11,9 +11,22 @@ For this reason you are responsible for collecting and processing the execution 
 Implementation also delegates the comparison of results to external solutions. 
 We believe this gives the you more freedom to use the API in your environment.
 
+== Dependency
+
+Use the following Maven dependency coordinates:
+
+[source,xml]
+----
+  <dependency>
+      <groupId>io.misterspex</groupId>
+      <artifactId>misterspex-scientist</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+  </dependency>
+----
+
 == Scientist usage
 
-The main idea of the Scientist solution is testing software refacorings in production.
+The main idea of the Scientist solution is testing software refactorings in production.
 Therefor a Scientist offers the execution of a _candidate_ (the new implementation of a functionality) and the _control_, which should be the current production implementation of a functionality.
 
 Main class of the Mister Spex Scientist implementation is `io.misterspex.executor.scientist.Experiment`. 
